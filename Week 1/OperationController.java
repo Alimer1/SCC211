@@ -1,24 +1,63 @@
-public class OperationController implements Runnable
+public class OperationController
 {
-    private Object lockA = new Object();
-    private int counter = 0;
 
-    public OperationController()
+    private Storage storage = new Storage();
+    private AddWorker[] addWorkers;
+    private SubWorker[] subWorkers;
+    
+    private Thread[] addThreads;
+    private Thread[] subThreads;
+
+    public OperationController(int nAddCount,int nSubCount,boolean nFunky)
     {
+        addWorkers = new AddWorker[nAddCount];
+        subWorkers = new SubWorker[nSubCount];
 
+        addThreads = new Thread[nAddCount];
+        subThreads = new Thread[nSubCount];
+
+        for(int i=0;i<nAddCount;i++)
+        {
+            addWorkers[i] = new AddWorker(storage,nFunky);
+            addThreads[i] = new Thread(addWorkers[i]);
+        }
+
+        for(int i=0;i<nSubCount;i++)
+        {
+            subWorkers[i] = new SubWorker(storage,nFunky);
+            subThreads[i] = new Thread(subWorkers[i]);
+        }
+
+        for(int i=0;i<nAddCount;i++)
+        {
+            addThreads[i].start();
+        }
+
+        for(int i=0;i<nSubCount;i++)
+        {
+            subThreads[i].start();
+        }
+
+        for(int i=0;i<nAddCount;i++)
+        {
+            try
+            {
+                addThreads[i].join();
+            }
+            catch (Exception e) {}
+        }
+
+        for(int i=0;i<nSubCount;i++)
+        {
+            try
+            {
+                subThreads[i].join();
+            }
+            catch (Exception e) {}
+        }
+
+        System.out.println("Completion! Final counter is :"+storage.getCounter());
+        
     }
 
-    public synchronized void run()
-    {
-        if(Thread.currentThread().getName().compareTo("add") == 0)
-        {
-            ++counter;
-            System.out.println("Thread added 1. Counter is now = "+counter);
-        }
-        else
-        {
-            --counter;
-            System.out.println("Thread removed 1. Counter is now = "+counter);
-        }
-    }
 }
