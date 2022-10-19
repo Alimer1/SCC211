@@ -16,13 +16,13 @@ public class Storage
     public synchronized void syncAddCounter()
     {
         stockpile++;
-        System.out.println("Added 1. Currently :"+stockpile);
+        System.out.println("Added 1 to storage. Currently :"+stockpile);
     }
 
     public synchronized void syncRemoveCounter()
     {
         stockpile--;
-        System.out.println("Removed 1. Currently :"+stockpile);
+        System.out.println("Removed 1 from storage. Currently :"+stockpile);
     }
 
     public void addCounter()
@@ -38,7 +38,7 @@ public class Storage
             System.out.println(e);
         }
         stockpile = temp;
-        System.out.println("Added 1. Currently :"+stockpile);
+        System.out.println("Added 1 to storage. Currently :"+stockpile);
     }
 
     public void removeCounter()
@@ -54,6 +54,6 @@ public class Storage
             System.out.println(e);
         }
         stockpile = temp;
-        System.out.println("Subbed 1. Currently :"+stockpile);
+        System.out.println("Removed 1 from storage. Currently :"+stockpile);
     }
 }

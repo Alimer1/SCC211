@@ -64,7 +64,7 @@ public class OperationController
             }
         }
 
-        for(int i=0;i<addCount;i++)
+        for(int i=0;i<removeCount;i++)
         {
             try
             {
@@ -77,7 +77,7 @@ public class OperationController
         }
 
         //Printing the final result
-        System.out.println("Completion! Final counter is :"+storage.getCounter());
+        System.out.println("Completion! Final stockpile in storage is :"+storage.getCounter());
     }
 
 }

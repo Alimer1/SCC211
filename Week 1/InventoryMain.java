@@ -2,7 +2,6 @@ public class InventoryMain
 {
     public static void main(String[] args) throws InterruptedException
     {
-
         int[] intArgs = new int[3]; //0 = addCount , 1 = removeCount , funky(bug) mode flag
         boolean funky;  //funky(bug) mode flag
 
@@ -54,6 +53,5 @@ public class InventoryMain
 
         OperationController mainOperation = new OperationController(intArgs[0], intArgs[1], funky);
         mainOperation.operationStart();
-
     }
 }
