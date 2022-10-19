@@ -3,61 +3,81 @@ public class OperationController
 
     private Storage storage = new Storage();
     private AddWorker[] addWorkers;
-    private SubWorker[] subWorkers;
+    private RemoveWorker[] removeWorkers;
     
     private Thread[] addThreads;
-    private Thread[] subThreads;
+    private Thread[] removeThreads;
 
-    public OperationController(int nAddCount,int nSubCount,boolean nFunky)
+    private int addCount;
+    private int removeCount;
+
+    public OperationController(int nAddCount,int nRemoveCount,boolean funky)
     {
-        addWorkers = new AddWorker[nAddCount];
-        subWorkers = new SubWorker[nSubCount];
+        addCount = nAddCount;
+        removeCount = nRemoveCount;
 
-        addThreads = new Thread[nAddCount];
-        subThreads = new Thread[nSubCount];
+        //Making the arrays correct size
+        addWorkers = new AddWorker[addCount];
+        removeWorkers = new RemoveWorker[removeCount];
 
-        for(int i=0;i<nAddCount;i++)
+        addThreads = new Thread[addCount];
+        removeThreads = new Thread[removeCount];
+
+        //Initialising both add and remove classes then assigning them to threads
+        for(int i=0;i<addCount;i++)
         {
-            addWorkers[i] = new AddWorker(storage,nFunky);
+            addWorkers[i] = new AddWorker(storage,funky);
             addThreads[i] = new Thread(addWorkers[i]);
         }
 
-        for(int i=0;i<nSubCount;i++)
+        for(int i=0;i<removeCount;i++)
         {
-            subWorkers[i] = new SubWorker(storage,nFunky);
-            subThreads[i] = new Thread(subWorkers[i]);
+            removeWorkers[i] = new RemoveWorker(storage,funky);
+            removeThreads[i] = new Thread(removeWorkers[i]);
         }
 
-        for(int i=0;i<nAddCount;i++)
+    }
+
+    public void operationStart()
+    {
+        //Starting add and remove threads
+        for(int i=0;i<addCount;i++)
         {
             addThreads[i].start();
         }
 
-        for(int i=0;i<nSubCount;i++)
+        for(int i=0;i<removeCount;i++)
         {
-            subThreads[i].start();
+            removeThreads[i].start();
         }
 
-        for(int i=0;i<nAddCount;i++)
+        //Waiting for both of them to finish
+        for(int i=0;i<addCount;i++)
         {
             try
             {
                 addThreads[i].join();
             }
-            catch (Exception e) {}
+            catch (Exception e)
+            {
+                System.out.println(e);
+            }
         }
 
-        for(int i=0;i<nSubCount;i++)
+        for(int i=0;i<addCount;i++)
         {
             try
             {
-                subThreads[i].join();
+                removeThreads[i].join();
             }
-            catch (Exception e) {}
+            catch (Exception e)
+            {
+                System.out.println(e);
+            }
         }
 
+        //Printing the final result
         System.out.println("Completion! Final counter is :"+storage.getCounter());
-        
     }
 
 }

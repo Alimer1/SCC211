@@ -1,7 +1,7 @@
 public class Storage
 {
 
-    private int counter = 0;
+    private int stockpile = 0;
 
     public Storage()
     {
@@ -10,38 +10,50 @@ public class Storage
 
     public int getCounter()
     {
-        return(counter);
+        return(stockpile);
     }
 
-    public synchronized void addCounter()
+    public synchronized void syncAddCounter()
     {
-        int temp = counter;
-        temp=temp+1;
-        counter = temp;
-        System.out.println("Added 1. Currently :"+counter);
+        stockpile++;
+        System.out.println("Added 1. Currently :"+stockpile);
     }
 
-    public synchronized void subCounter()
+    public synchronized void syncRemoveCounter()
     {
-        int temp = counter;
-        temp=temp-1;
-        counter = temp;
-        System.out.println("Subbed 1. Currently :"+counter);
+        stockpile--;
+        System.out.println("Removed 1. Currently :"+stockpile);
     }
 
-    public void addBadCounter()
+    public void addCounter()
     {
-        int temp = counter;
-        temp=temp+1;
-        counter = temp;
-        System.out.println("Added 1. Currently :"+counter);
+        int temp = stockpile;
+        temp++;
+        try
+        {
+            Thread.sleep(100);
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+        stockpile = temp;
+        System.out.println("Added 1. Currently :"+stockpile);
     }
 
-    public void subBadCounter()
+    public void removeCounter()
     {
-        int temp = counter;
-        temp=temp-1;
-        counter = temp;
-        System.out.println("Subbed 1. Currently :"+counter);
+        int temp = stockpile;
+        temp--;
+        try
+        {
+            Thread.sleep(100);
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+        stockpile = temp;
+        System.out.println("Subbed 1. Currently :"+stockpile);
     }
 }

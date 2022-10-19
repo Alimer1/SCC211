@@ -1,23 +1,19 @@
-public class AddWorker implements Runnable
+public class AddWorker extends Worker implements Runnable
 {
-    private Storage storage;
-    private boolean funky = false;
-
     public AddWorker(Storage nStorage,boolean nFunky)
     {
-        storage = nStorage;
-        funky = nFunky;
+        super(nStorage, nFunky);
     }
 
     public void run()
     {
         if(funky)
         {
-            storage.addBadCounter();
+            storage.addCounter();
         }
         else
         {
-            storage.addCounter();
+            storage.syncAddCounter();
         }
     }
 }
