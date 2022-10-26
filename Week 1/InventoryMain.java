@@ -1,7 +1,11 @@
+/**
+ * Class that holds the main method and passes the given arguments appropriately
+ */
 public class InventoryMain
 {
     public static void main(String[] args) throws InterruptedException
     {
+        OperationController mainOperation;
         int[] intArgs = new int[3]; //0 = addCount , 1 = removeCount , funky(bug) mode flag
         boolean funky;  //funky(bug) mode flag
 
@@ -35,6 +39,7 @@ public class InventoryMain
                 intArgs[0] = Integer.parseInt(args[0]);
                 intArgs[1] = Integer.parseInt(args[1]);
                 intArgs[2] = Integer.parseInt(args[2]);
+                break;
         }
 
         switch(intArgs[2])  //Assigning the funky flag acording to the third argument
@@ -51,7 +56,7 @@ public class InventoryMain
                 break;
         }
 
-        OperationController mainOperation = new OperationController(intArgs[0], intArgs[1], funky);
+        mainOperation = new OperationController(intArgs[0], intArgs[1], funky);
         mainOperation.operationStart();
     }
 }

@@ -1,11 +1,35 @@
-public class Worker
+/**
+ * General abstract worker class
+ */
+public abstract class Worker implements Runnable
 {
-    protected Storage storage;
-    protected boolean funky = false;
+    private Storage storage;
+    private boolean funky = false;
 
-    public Worker(Storage nStorage,boolean nFunky)
+    public Worker(Storage storage,boolean funky)
     {
-        storage = nStorage;
-        funky = nFunky;
+        this.storage = storage;
+        this.funky = funky;
     }
+
+    /**
+     * 
+     * @return
+     */
+    public Storage getStorage()
+    {
+        return storage;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public boolean getFunky()
+    {
+        return funky;
+    } 
+    
+    public abstract void run();
+
 }

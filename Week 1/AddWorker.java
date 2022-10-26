@@ -1,19 +1,29 @@
-public class AddWorker extends Worker implements Runnable
+/**
+ * This class will call a method on the given storage class when run() is called
+ */
+public class AddWorker extends Worker
 {
-    public AddWorker(Storage nStorage,boolean nFunky)
+    /**
+     * @param storage   //Storage that will be worked on
+     * @param funky     //Flag if true will call the bad add operation on storage
+     */
+    public AddWorker(Storage storage,boolean funky)
     {
-        super(nStorage, nFunky);
+        super(storage, funky);
     }
 
+    /*
+     * Calls the method on the given storage depending on the funky value
+     */
     public void run()
     {
-        if(funky)
+        if(getFunky())
         {
-            storage.addCounter();
+            getStorage().addCounter();
         }
         else
         {
-            storage.syncAddCounter();
+            getStorage().syncAddCounter();
         }
     }
 }

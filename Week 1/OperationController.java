@@ -1,74 +1,72 @@
+/**
+ * Controls the operation of workers that remove and add stuff to the storage(stockpile).
+ */
 public class OperationController
 {
 
-    private Storage storage = new Storage();
-    private AddWorker[] addWorkers;
-    private RemoveWorker[] removeWorkers;
-    
-    private Thread[] addThreads;
-    private Thread[] removeThreads;
+    private Storage storage = new Storage();    //Storage that every worker will be working on
 
-    private int addCount;
-    private int removeCount;
+    private Worker[] workers;
+    private Thread[] workerThreads;
 
-    public OperationController(int nAddCount,int nRemoveCount,boolean funky)
+    private int totalWorkerCount;               //Total number of total workers that will be working on the stockpile
+
+
+    /**
+     * Creates and assigns worker classes to threads to be run by the operationStart() method
+     * 
+     * @param addWorkerCount    Number of workers that are going to add to the stockpile
+     * @param removeWorkerCount Number of workers that are going to remove from the stockpile
+     * @param funky             Bug flag (Funky flag) if it is true the result of the program will be not syncronised and will give an incorrect result.
+     */
+    public OperationController(int addWorkerCount,int removeWorkerCount,boolean funky)
     {
-        addCount = nAddCount;
-        removeCount = nRemoveCount;
 
-        //Making the arrays correct size
-        addWorkers = new AddWorker[addCount];
-        removeWorkers = new RemoveWorker[removeCount];
+        totalWorkerCount = addWorkerCount + removeWorkerCount;
 
-        addThreads = new Thread[addCount];
-        removeThreads = new Thread[removeCount];
+        //Creating the threads and the workers
+        workers = new Worker[totalWorkerCount];
+        workerThreads = new Thread[totalWorkerCount];
 
-        //Initialising both add and remove classes then assigning them to threads
-        for(int i=0;i<addCount;i++)
+        //We first add AddWorkers to the Worker array
+        for(int i=0;i<addWorkerCount;i++)
         {
-            addWorkers[i] = new AddWorker(storage,funky);
-            addThreads[i] = new Thread(addWorkers[i]);
+            workers[i] = new AddWorker(storage,funky);
         }
 
-        for(int i=0;i<removeCount;i++)
+        //Then we continue from where we left of and add the RemoveWorkers to the array
+        for(int i=0;i<(removeWorkerCount);i++)
         {
-            removeWorkers[i] = new RemoveWorker(storage,funky);
-            removeThreads[i] = new Thread(removeWorkers[i]);
+            workers[i+addWorkerCount] = new RemoveWorker(storage,funky);
+        }
+
+        //We add all the workers to the threads
+        for(int i=0;i<totalWorkerCount;i++)
+        {
+            workerThreads[i] = new Thread(workers[i]);
         }
 
     }
 
+    /**
+     * Stars the treads initialised in the constructor.
+     * Waits for them to finish before displaying the final stockpile amount. 
+     */
     public void operationStart()
     {
-        //Starting add and remove threads
-        for(int i=0;i<addCount;i++)
+        //Starting all the threads
+        for(int i=0;i<workerThreads.length;i++)
         {
-            addThreads[i].start();
+            workerThreads[i].start();
         }
 
-        for(int i=0;i<removeCount;i++)
-        {
-            removeThreads[i].start();
-        }
 
-        //Waiting for both of them to finish
-        for(int i=0;i<addCount;i++)
+        //Waiting for threads to finish
+        for(int i=0;i<workerThreads.length;i++)
         {
             try
             {
-                addThreads[i].join();
-            }
-            catch (Exception e)
-            {
-                System.out.println(e);
-            }
-        }
-
-        for(int i=0;i<removeCount;i++)
-        {
-            try
-            {
-                removeThreads[i].join();
+                workerThreads[i].join();
             }
             catch (Exception e)
             {

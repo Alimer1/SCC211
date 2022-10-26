@@ -1,19 +1,29 @@
-public class RemoveWorker extends Worker implements Runnable
+/**
+ * This class will call a method on the given storage class when run() is called
+ */
+public class RemoveWorker extends Worker
 {
-    public RemoveWorker(Storage nStorage,boolean nFunky)
+    /**
+     * @param storage   //Storage that will be worked on
+     * @param funky     //Flag if true will call the bad remove operation on storage
+     */
+    public RemoveWorker(Storage storage,boolean funky)
     {
-        super(nStorage, nFunky);
+        super(storage, funky);
     }
 
+    /*
+     * Calls the method on the given storage depending on the funky value
+     */
     public void run()
     {
-        if(funky)
+        if(getFunky())
         {
-            storage.removeCounter();
+            getStorage().removeCounter();
         }
         else
         {
-            storage.syncRemoveCounter();
+            getStorage().syncRemoveCounter();
         }
     }
 }
